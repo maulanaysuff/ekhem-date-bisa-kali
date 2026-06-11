@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undangan Rahasia 💌</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    min-height:100vh;
+    overflow:hidden;
+}
+
+.screen{
+    width:100%;
+    min-height:100vh;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
+}
+
+.active{
+    display:flex;
+}
+
+.envelope{
+    font-size:120px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.envelope:hover{
+    transform:scale(1.1);
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    max-width:600px;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+h1{
+    margin-bottom:15px;
+}
+
+p{
+    margin-bottom:20px;
+    line-height:1.6;
+}
+
+.buttons{
+    position:relative;
+    height:120px;
+}
+
+button{
+    border:none;
+    padding:12px 24px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:16px;
+    transition:.3s;
+}
+
+.yes{
+    background:#ff4d6d;
+    color:white;
+}
+
+.no{
+    background:#444;
+    color:white;
+    position:absolute;
+    left:55%;
+    top:0;
+}
+
+.option{
+    margin:10px;
+    background:#fff;
+    border:2px solid #ff4d6d;
+    color:#ff4d6d;
+}
+
+.option:hover{
+    background:#ff4d6d;
+    color:white;
+}
+
+select,input{
+    width:250px;
+    padding:10px;
+    margin:10px;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+
+.next{
+    background:#ff4d6d;
+    color:white;
+    margin-top:15px;
+}
+
+.final{
+    font-size:28px;
+    color:white;
+    text-shadow:0 0 10px rgba(0,0,0,.2);
+}
+
+.hearts{
+    position:fixed;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+}
+
+.heart{
+    position:absolute;
+    font-size:24px;
+    animation:float 4s linear forwards;
+}
+
+@keyframes float{
+    from{
+        transform:translateY(0);
+        opacity:1;
+    }
+    to{
+        transform:translateY(-800px);
+        opacity:0;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<!-- Halaman 1 -->
+<div class="screen active" id="home">
+    <div class="envelope" onclick="openLetter()">💌</div>
+    <h2>Klik surat rahasia ini 😳</h2>
+</div>
+
+<!-- Halaman 2 -->
+<div class="screen" id="letter">
+    <div class="card">
+        <h1>Hai Kak ✨</h1>
+
+        <p>
+            Aku punya pertanyaan penting nih...
+            <br><br>
+            Mau nggak jadi partner kencanku minggu ini? 😳❤️
+        </p>
+
+        <div class="buttons">
+            <button class="yes" onclick="nextPage('outfit')">
+                Mauu Banget ❤️
+            </button>
+
+            <button class="no" id="noBtn">
+                Ga Ah 😤
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Outfit -->
+<div class="screen" id="outfit">
+    <div class="card">
+        <h1>Pilih Outfit 👕</h1>
+
+        <select id="outfitChoice">
+            <option>Casual</option>
+            <option>Formal</option>
+            <option>All Black 🖤</option>
+            <option>Cute 🌸</option>
+        </select>
+
+        <br>
+        <button class="next" onclick="nextPage('place')">
+            Lanjut
+        </button>
+    </div>
+</div>
+
+<!-- Tempat -->
+<div class="screen" id="place">
+    <div class="card">
+        <h1>Mau ke mana? 📍</h1>
+
+        <select id="placeChoice">
+            <option>Cafe ☕</option>
+            <option>Mall 🛍️</option>
+            <option>Taman 🌳</option>
+            <option>Nonton 🎬</option>
+        </select>
+
+        <br>
+        <button class="next" onclick="nextPage('date')">
+            Lanjut
+        </button>
+    </div>
+</div>
+
+<!-- Tanggal -->
+<div class="screen" id="date">
+    <div class="card">
+        <h1>Pilih Tanggal 📅</h1>
+
+        <input type="date" id="dateChoice">
+
+        <br>
+        <button class="next" onclick="finishDate()">
+            Konfirmasi ❤️
+        </button>
+    </div>
+</div>
+
+<!-- Akhir -->
+<div class="screen" id="finish">
+    <h1 class="final">🎉 YEAYYY 🎉</h1>
+
+    <br>
+
+    <div class="card">
+        <h2>Kencan Berhasil Dijadwalkan ❤️</h2>
+
+        <p id="summary"></p>
+
+        <h3>Screenshot halaman ini ya 😳</h3>
+    </div>
+</div>
+
+<script>
+
+function show(id){
+    document.querySelectorAll('.screen')
+    .forEach(s=>s.classList.remove('active'));
+
+    document.getElementById(id)
+    .classList.add('active');
+}
+
+function openLetter(){
+    show('letter');
+}
+
+function nextPage(id){
+    show(id);
+}
+
+const noBtn=document.getElementById('noBtn');
+
+noBtn.addEventListener('mouseover',()=>{
+    const x=Math.random()*(window.innerWidth-150);
+    const y=Math.random()*200;
+
+    noBtn.style.left=x+'px';
+    noBtn.style.top=y+'px';
+});
+
+function finishDate(){
+
+    const outfit=
+    document.getElementById('outfitChoice').value;
+
+    const place=
+    document.getElementById('placeChoice').value;
+
+    const date=
+    document.getElementById('dateChoice').value;
+
+    document.getElementById('summary').innerHTML=
+    `
+    👕 Outfit: <b>${outfit}</b><br><br>
+    📍 Tempat: <b>${place}</b><br><br>
+    📅 Tanggal: <b>${date || "Rahasia 😳"}</b>
+    `;
+
+    show('finish');
+
+    setInterval(createHeart,250);
+}
+
+function createHeart(){
+
+    const heart=document.createElement('div');
+
+    heart.className='heart';
+    heart.innerHTML='❤️';
+
+    heart.style.left=
+    Math.random()*window.innerWidth+'px';
+
+    heart.style.bottom='0px';
+
+    document.getElementById('hearts')
+    .appendChild(heart);
+
+    setTimeout(()=>{
+        heart.remove();
+    },4000);
+}
+
+</script>
+
+</body>
+</html>
